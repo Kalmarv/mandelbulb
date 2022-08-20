@@ -11,6 +11,7 @@
     "@react-three/drei": "^9.23.1",
     "@react-three/fiber": "^8.4.1",
     "@types/three": "^0.143.1",
+    "leva": "^0.9.30",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.143.0"

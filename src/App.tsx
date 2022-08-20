@@ -1,22 +1,47 @@
-import { Canvas, ThreeElements, useFrame } from '@react-three/fiber'
-import { useRef, useState } from 'react'
 import { Environment, OrbitControls } from '@react-three/drei'
+import { Canvas, extend, MaterialNode, useFrame } from '@react-three/fiber'
+import { useControls } from 'leva'
+import { useRef } from 'react'
+import { Vector2, Vector3 } from 'three'
+import { MandelbulbMaterial } from './shader'
 
-const Box = (props: ThreeElements['mesh']) => {
-  const mesh = useRef<THREE.Mesh>(null!)
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-  useFrame(() => (mesh.current.rotation.x += 0.01))
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      mandelbulbMaterial: MaterialNode<any, typeof MandelbulbMaterial>
+    }
+  }
+}
+
+extend({ MandelbulbMaterial })
+
+const Fragment = () => {
+  const { color } = useControls({ color: '#ff0000' })
+  const mRef = useRef<any>()
+  const gRef = useRef<THREE.PlaneBufferGeometry>(null!)
+
+  useFrame((state) => {
+    if (mRef.current) {
+      mRef.current.u_time = state.clock.getElapsedTime()
+    }
+  })
+
   return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={active ? 1.5 : 1}
-      onClick={() => setActive(!active)}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    <mesh position={[0, 0, 0]} scale={1.0}>
+      <planeBufferGeometry ref={gRef} args={[1, 1, 1]} />
+      <mandelbulbMaterial
+        ref={mRef}
+        u_resolution={new Vector2(window.innerWidth, window.innerHeight)}
+        minimumStepDistance={Math.pow(10, -1 * 3.0)}
+        maxRaySteps={75}
+        colors={16}
+        d_est_u={0}
+        iterations={16}
+        power={8.0}
+        bailout={8.0}
+        camera={new Vector3(2, 2, 2)}
+        focus={new Vector3(0, 0, 0)}
+      />
     </mesh>
   )
 }
@@ -29,8 +54,7 @@ const App = () => {
         <OrbitControls makeDefault />
         <Environment preset='sunset' />
         <pointLight position={[10, 10, 10]} />
-        <Box position={[-1.2, 0, 0]} />
-        <Box position={[1.2, 0, 0]} />
+        <Fragment />
       </Canvas>
     </>
   )
