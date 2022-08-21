@@ -14,10 +14,26 @@ uniform mat4 camViewMatrix;
 uniform mat4 camProjectionMatrix;
 uniform vec3 focus;
 
+uniform float color1;
+uniform float color2;
+uniform float color3;
+uniform float color4;
+uniform float color5;
+uniform float color6;
+uniform float color7;
+uniform float color8;
+uniform float color9;
+
+// vec3 hsv2rgb(vec3 c) {
+//   vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+//   vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+//   return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+// }
+
 vec3 hsv2rgb(vec3 c) {
-  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+  vec4 K = vec4(color1, color2 / color3, color4 / color5, color6);
+  vec3 p = abs(fract(c.xxx + K.xyz) * color7 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, color8, color9), c.y);
 }
 
 vec3 toRectangular(vec3 sph) {
