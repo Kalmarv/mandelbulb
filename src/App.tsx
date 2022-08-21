@@ -1,8 +1,7 @@
-import { Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { Canvas, extend, MaterialNode, useFrame, useThree } from '@react-three/fiber'
-import { useControls } from 'leva'
 import { useEffect, useRef } from 'react'
-import { Matrix4, Vector2, Vector3 } from 'three'
+import { Vector2, Vector3 } from 'three'
 import { MandelbulbMaterial } from './shader'
 
 declare global {
