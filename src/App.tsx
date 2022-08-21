@@ -1,7 +1,7 @@
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, extend, MaterialNode, useFrame, useThree } from '@react-three/fiber'
 import { useControls } from 'leva'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Vector2, Vector3 } from 'three'
 import { MandelbulbMaterial } from './shader'
 
@@ -15,48 +15,15 @@ declare global {
 
 extend({ MandelbulbMaterial })
 
-const Fragment = () => {
+const Fragment: React.FC<{ dpr: number }> = ({ dpr }) => {
   const { maxRaySteps, colors, iterations, bailout, power, minStepDistance, rotate, animate } =
     useControls({
-      maxRaySteps: {
-        value: 75,
-        min: 1,
-        max: 100,
-        step: 1,
-        label: 'Max Ray Steps',
-      },
-      colors: {
-        value: 16,
-        min: 1,
-        max: 50,
-        step: 1,
-        label: 'Color Range',
-      },
-      iterations: {
-        value: 16,
-        min: 1,
-        max: 100,
-        step: 1,
-        label: 'Iterations',
-      },
-      bailout: {
-        value: 8,
-        min: 0,
-        max: 100,
-        label: 'Bailout',
-      },
-      power: {
-        value: 8,
-        min: 0,
-        max: 20,
-        label: 'Power',
-      },
-      minStepDistance: {
-        value: 3.0,
-        min: 0,
-        max: 10,
-        label: 'Min Step Distance',
-      },
+      maxRaySteps: { value: 75, min: 1, max: 150, step: 1, label: 'Max Ray Steps' },
+      colors: { value: 16, min: 1, max: 50, label: 'Color Range' },
+      iterations: { value: 16, min: 1, max: 100, step: 1, label: 'Iterations' },
+      bailout: { value: 8, min: 0, max: 100, label: 'Bailout' },
+      power: { value: 8, min: 0, max: 20, label: 'Power' },
+      minStepDistance: { value: 3.0, min: 0, max: 10, label: 'Min Step Distance' },
       rotate: true,
       animate: true,
     })
@@ -78,6 +45,11 @@ const Fragment = () => {
     camera.lookAt(new Vector3(0, 0, 2))
   }, [camera])
 
+  const scaling = useMemo(
+    () => new Vector2(window.innerWidth * dpr, window.innerHeight * dpr),
+    [dpr]
+  )
+
   return (
     <>
       <OrbitControls makeDefault autoRotate={rotate} autoRotateSpeed={0.1} />
@@ -85,7 +57,7 @@ const Fragment = () => {
         <planeBufferGeometry ref={gRef} args={[2, 2, 2]} />
         <mandelbulbMaterial
           ref={mRef}
-          u_resolution={new Vector2(window.innerWidth, window.innerHeight)}
+          u_resolution={scaling}
           minimumStepDistance={Math.pow(10, -1 * minStepDistance)}
           maxRaySteps={maxRaySteps}
           colors={colors}
@@ -103,10 +75,19 @@ const Fragment = () => {
 }
 
 const App = () => {
+  const { dpr } = useControls({
+    dpr: {
+      value: 1,
+      min: 0.1,
+      max: 2,
+      label: 'Resolution',
+    },
+  })
+
   return (
     <>
-      <Canvas style={{ width: '100%', height: '100vh' }} camera={{ position: [0, 0, 2] }}>
-        <Fragment />
+      <Canvas style={{ width: '100%', height: '100vh' }} camera={{ position: [0, 0, 2] }} dpr={dpr}>
+        <Fragment dpr={dpr} />
       </Canvas>
     </>
   )

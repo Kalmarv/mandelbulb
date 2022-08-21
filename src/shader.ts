@@ -35,7 +35,7 @@ export const MandelbulbMaterial = shaderMaterial(
   
   uniform float minimumStepDistance;
   uniform int maxRaySteps;
-  uniform int colors;
+  uniform float colors;
   uniform float d_est_u;
   uniform int iterations;
   uniform float power;
@@ -73,7 +73,7 @@ export const MandelbulbMaterial = shaderMaterial(
       int ii;
       for(int i=0;i<129;i++) {
         ii = i;
-        if (i>=colors) return 1.0;//-trap/float(colors);
+        if (float(i)>=colors) return 1.0;//-trap/float(colors);
         r = length(z);
         if (r>bailout) break;
         trap+=r;
