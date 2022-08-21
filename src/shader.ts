@@ -44,11 +44,8 @@ export const MandelbulbMaterial = shaderMaterial(
   uniform vec3 camPosition;
   uniform mat4 camViewMatrix;
   uniform mat4 camProjectionMatrix;
-
-  // uniform vec3 camera;
   uniform vec3 focus;
-  vec3 light = vec3(0.0,1.5,4.0);
-
+  
   vec3 hsv2rgb(vec3 c) {
       vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
       vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
@@ -110,7 +107,7 @@ export const MandelbulbMaterial = shaderMaterial(
         dr = ( pow(r, power-1.0)*power*dr ) + 1.0;        
       }
       return 0.5*log(r)*r/dr;
-      //return (0.85 - length(position)) + 0.5*log(r)*r/dr;
+      // return (0.85 - length(position)) + 0.5*log(r)*r/dr;
   }
   
 vec3 normalOf(vec3 pos) {
@@ -125,14 +122,14 @@ vec3 march(vec3 from, vec3 direction) {
       float dist;
       vec3 position;
       int steps;
-      for (int steps=0;steps<256;steps++) {
+      for (int steps=0;steps<100;steps++) {
           if (steps>=maxRaySteps) break;
           position = vec3(from.x + (direction.x*totalDistance),
                           from.y + (direction.y*totalDistance),
                           from.z + (direction.z*totalDistance));
           dist=DE(position);
           totalDistance+=dist;
-      //if(totalDistance>9.0) return vec3(0.533,1.0,0.21);
+      // if(totalDistance>9.0) return vec3(0.533,1.0,0.21);
     if(totalDistance>max(d_est_u*2.0,4.0)) return vec3(0.0,0.0,0.0);
           if(dist<minimumStepDistance) {
             return vec3(escape(position),0.55,(1.0-float(steps)/float(maxRaySteps)));
@@ -146,25 +143,11 @@ vec3 march(vec3 from, vec3 direction) {
   }
 
   void main(void) {
-      //uv is between 0 and 1
       vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-      // compute raymarching vectors
-      vec3 viewVector = focus - camPosition;
-      vec3 topVector = toSpherical(viewVector);
-      topVector.z += 1.5708;
-      topVector = toRectangular(topVector);
-      vec3 sideVector = cross(viewVector,topVector);
-      sideVector = normalize(sideVector)*length(topVector);
-      // pixel by pixel
-      float dx = zoom*(uv.x - 0.5);
-      float dy = (-1.0)*zoom*(uv.y - 0.5)*(u_resolution.y/u_resolution.x);
-
       vec2 fragCoord = linmap(gl_FragCoord.xy, vec2(0, 0), u_resolution, vec2(-1.0, -1.0), vec2(1.0, 1.0));
       vec3 rayDirection = normalize(inverse(mat3(camProjectionMatrix) * mat3(camViewMatrix)) * vec3(fragCoord, 1.0));
 
-      // vec3 direction = normalize((sideVector*dx) + (topVector*dy) + viewVector);
       gl_FragColor = vec4(hsv2rgb(march(camPosition,rayDirection)),1.0);
-      // gl_FragColor = vec4(hsv2rgb(march(camPosition,direction)),1.0);
   }
   `
 )
