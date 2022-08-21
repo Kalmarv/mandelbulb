@@ -3,6 +3,7 @@ import { Canvas, extend, MaterialNode, useFrame, useThree } from '@react-three/f
 import { useControls } from 'leva'
 import { useEffect, useMemo, useRef } from 'react'
 import { Vector2, Vector3 } from 'three'
+import Logo from './logo'
 import { MandelbulbMaterial } from './shader'
 
 declare global {
@@ -89,6 +90,7 @@ const App = () => {
       <Canvas style={{ width: '100%', height: '100vh' }} camera={{ position: [0, 0, 2] }} dpr={dpr}>
         <Fragment dpr={dpr} />
       </Canvas>
+      <Logo />
     </>
   )
 }
