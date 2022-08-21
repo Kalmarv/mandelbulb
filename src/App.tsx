@@ -1,10 +1,11 @@
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, extend, MaterialNode, useFrame, useThree } from '@react-three/fiber'
-import { useControls } from 'leva'
+import { button, useControls } from 'leva'
 import { useEffect, useMemo, useRef } from 'react'
 import { Vector2, Vector3 } from 'three'
 import Logo from './logo'
 import { MandelbulbMaterial } from './shader'
+import { CanvasCapture } from 'canvas-capture'
 
 declare global {
   namespace JSX {
@@ -99,18 +100,37 @@ const Fragment: React.FC<{ dpr: number }> = ({ dpr }) => {
 }
 
 const App = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const { dpr } = useControls({
+    'Take Screenshot': button(() => CanvasCapture.takePNGSnapshot()),
     dpr: {
       value: 1,
       min: 0.1,
-      max: 2,
+      max: 5,
       label: 'Resolution',
     },
   })
 
+  /*
+  If you see Uncaught ReferenceError: remaining is not defined in the console,
+  it's caused by an extension. The capture will still work though. Try it out
+  in incognito and you should see the error go away.
+
+  SEE: https://github.com/amandaghassaei/canvas-capture/issues/10
+   */
+
+  useEffect(() => {
+    if (canvasRef.current) CanvasCapture.init(canvasRef.current)
+  }, [canvasRef])
+
   return (
     <>
-      <Canvas style={{ width: '100%', height: '100vh' }} camera={{ position: [0, 0, 2] }} dpr={dpr}>
+      <Canvas
+        ref={canvasRef}
+        style={{ width: '100%', height: '100vh' }}
+        camera={{ position: [0, 0, 2] }}
+        dpr={dpr}
+        gl={{ preserveDrawingBuffer: true }}>
         <Fragment dpr={dpr} />
       </Canvas>
       <Logo />
