@@ -3,9 +3,9 @@ import { Canvas, extend, MaterialNode, useFrame, useThree } from '@react-three/f
 import { button, useControls } from 'leva'
 import { useEffect, useMemo, useRef } from 'react'
 import { Vector2, Vector3 } from 'three'
-import Logo from './logo'
 import { MandelbulbMaterial } from './shader'
 import { CanvasCapture } from 'canvas-capture'
+import { Github, Logo } from './logo'
 
 declare global {
   namespace JSX {
@@ -134,6 +134,7 @@ const App = () => {
         <Fragment dpr={dpr} />
       </Canvas>
       <Logo />
+      <Github />
     </>
   )
 }
