@@ -18,17 +18,27 @@ declare global {
 extend({ MandelbulbMaterial })
 
 const Fragment: React.FC<{ dpr: number }> = ({ dpr }) => {
-  const { animSpeed, maxRaySteps, iterations, bailout, power, minStepDistance, rotate, animate } =
-    useControls({
-      maxRaySteps: { value: 75, min: 1, max: 150, step: 1, label: 'Max Ray Steps' },
-      iterations: { value: 16, min: 1, max: 100, step: 1, label: 'Iterations' },
-      bailout: { value: 8, min: 0, max: 100, label: 'Bailout' },
-      power: { value: 8, min: 0, max: 20, label: 'Progress' },
-      minStepDistance: { value: 3.0, min: 0, max: 10, label: 'Min Step Distance' },
-      rotate: true,
-      animate: true,
-      animSpeed: { value: 1, min: -10, max: 10, label: 'Animation Speed' },
-    })
+  const {
+    animSpeed,
+    maxRaySteps,
+    iterations,
+    bailout,
+    power,
+    minStepDistance,
+    rotate,
+    animate,
+    rotSpeed,
+  } = useControls({
+    maxRaySteps: { value: 75, min: 1, max: 150, step: 1, label: 'Max Ray Steps' },
+    iterations: { value: 16, min: 1, max: 100, step: 1, label: 'Iterations' },
+    bailout: { value: 8, min: 0, max: 100, label: 'Bailout' },
+    power: { value: 8, min: 0, max: 20, label: 'Progress' },
+    minStepDistance: { value: 3.0, min: 0, max: 10, label: 'Min Step Distance' },
+    rotate: true,
+    rotSpeed: { value: 1, min: -10, max: 10, label: 'Rotation Speed' },
+    animate: true,
+    animSpeed: { value: 1, min: -10, max: 10, label: 'Animation Speed' },
+  })
   const { colors, color1, color2, color3, color4, color5, color6, color7, color8, color9 } =
     useControls(
       'Color Stuff',
@@ -68,7 +78,7 @@ const Fragment: React.FC<{ dpr: number }> = ({ dpr }) => {
 
   return (
     <>
-      <OrbitControls makeDefault autoRotate={rotate} autoRotateSpeed={0.1} />
+      <OrbitControls makeDefault autoRotate={rotate} autoRotateSpeed={0.1 * rotSpeed} />
       <mesh position={[0, 0, 0]} scale={1.0}>
         <planeBufferGeometry ref={gRef} args={[2, 2, 2]} />
         <mandelbulbMaterial

@@ -1,6 +1,10 @@
 export const Logo = () => {
   return (
-    <a href='https://kalmarv.xyz/' target='_blank' rel='noopener noreferrer'>
+    <a
+      href='https://kalmarv.xyz/'
+      target='_blank'
+      rel='noopener noreferrer'
+      className='umami--click--view-portfolio'>
       <div className='transition fixed bottom-4 left-4 fill-white stroke-white w-10 h-10 hover:fill-[#ff8f88] hover:stroke-[#ff8f88]'>
         <svg viewBox='205.1 165.5 130 130' xmlns='http://www.w3.org/2000/svg'>
           <path
@@ -25,7 +29,11 @@ export const Logo = () => {
 
 export const Github = () => {
   return (
-    <a href='https://github.com/Kalmarv/mandelbulb' target='_blank' rel='noopener noreferrer'>
+    <a
+      href='https://github.com/Kalmarv/mandelbulb'
+      target='_blank'
+      rel='noopener noreferrer'
+      className='umami--click--view-source'>
       <div className='transition fixed bottom-4 right-4 fill-white w-10 h-10 hover:fill-[#ff8f88]'>
         <svg
           role='img'

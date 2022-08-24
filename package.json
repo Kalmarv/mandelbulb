@@ -14,7 +14,6 @@
     "@types/three": "^0.143.1",
     "canvas-capture": "^2.0.4",
     "leva": "^0.9.30",
-    "postprocessing": "^6.28.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.143.0"
@@ -23,8 +22,6 @@
     "@kalmarv/prettier-config": "^1.0.2",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@typescript-eslint/eslint-plugin": "^5.33.1",
-    "@typescript-eslint/parser": "^5.33.1",
     "@vitejs/plugin-react": "^2.0.1",
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.16",
