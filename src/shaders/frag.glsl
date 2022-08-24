@@ -24,26 +24,10 @@ uniform float color7;
 uniform float color8;
 uniform float color9;
 
-// vec3 hsv2rgb(vec3 c) {
-//   vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-//   vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-//   return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-// }
-
 vec3 hsv2rgb(vec3 c) {
   vec4 K = vec4(color1, color2 / color3, color4 / color5, color6);
   vec3 p = abs(fract(c.xxx + K.xyz) * color7 - K.www);
   return c.z * mix(K.xxx, clamp(p - K.xxx, color8, color9), c.y);
-}
-
-vec3 toRectangular(vec3 sph) {
-  return vec3(sph.x * sin(sph.z) * cos(sph.y), sph.x * sin(sph.z) * sin(sph.y),
-              sph.x * cos(sph.z));
-}
-
-vec3 toSpherical(vec3 rec) {
-  return vec3(length(rec), atan(rec.y, rec.x),
-              atan(sqrt(rec.x * rec.x + rec.y * rec.y), rec.z));
 }
 
 float escape(vec3 position) {
@@ -55,7 +39,7 @@ float escape(vec3 position) {
   for (int i = 0; i < 129; i++) {
     ii = i;
     if (float(i) >= colors)
-      return 1.0; //-trap/float(colors);
+      return 1.0;
     r = length(z);
     if (r > bailout)
       break;
@@ -92,7 +76,6 @@ float DE(vec3 position) {
     dr = (pow(r, power - 1.0) * power * dr) + 1.0;
   }
   return 0.5 * log(r) * r / dr;
-  // return (0.85 - length(position)) + 0.5*log(r)*r/dr;
 }
 
 vec3 normalOf(vec3 pos) {
@@ -116,7 +99,6 @@ vec3 march(vec3 from, vec3 direction) {
                     from.z + (direction.z * totalDistance));
     dist = DE(position);
     totalDistance += dist;
-    // if(totalDistance>9.0) return vec3(0.533,1.0,0.21);
     if (totalDistance > max(d_est_u * 2.0, 4.0))
       return vec3(0.0, 0.0, 0.0);
     if (dist < minimumStepDistance) {
