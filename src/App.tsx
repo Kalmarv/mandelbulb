@@ -18,7 +18,7 @@ declare global {
 extend({ MandelbulbMaterial })
 
 const Fragment: React.FC<{ dpr: number }> = ({ dpr }) => {
-  const {
+  const [{
     animSpeed,
     maxRaySteps,
     iterations,
@@ -28,7 +28,7 @@ const Fragment: React.FC<{ dpr: number }> = ({ dpr }) => {
     rotate,
     animate,
     rotSpeed,
-  } = useControls({
+  }, set] = useControls(() => ({
     maxRaySteps: { value: 75, min: 1, max: 150, step: 1, label: 'Max Ray Steps' },
     iterations: { value: 16, min: 1, max: 100, step: 1, label: 'Iterations' },
     bailout: { value: 8, min: 0, max: 100, label: 'Bailout' },
@@ -38,7 +38,7 @@ const Fragment: React.FC<{ dpr: number }> = ({ dpr }) => {
     rotSpeed: { value: 1, min: -10, max: 10, label: 'Rotation Speed' },
     animate: true,
     animSpeed: { value: 1, min: -10, max: 10, label: 'Animation Speed' },
-  })
+  }))
   const { colors, color1, color2, color3, color4, color5, color6, color7, color8, color9 } =
     useControls(
       'Color Stuff',
@@ -58,6 +58,19 @@ const Fragment: React.FC<{ dpr: number }> = ({ dpr }) => {
         collapsed: true,
       }
     )
+    const randomValues = useControls('Randomize', {
+    'Random Values': button(() => {
+      set({
+        maxRaySteps: Math.random() * (100 - 50) + 50,
+        iterations: Math.floor(Math.random() * 100),
+        bailout: Math.random() * (30 - 2) + 2,
+        power: Math.random() * (20 - 1) + 1,
+        minStepDistance: Math.random() * (5 - 2) + 2,
+      })
+    })
+  })
+
+
   const mRef = useRef<any>()
   const gRef = useRef<THREE.PlaneBufferGeometry>(null!)
   const { camera } = useThree()
